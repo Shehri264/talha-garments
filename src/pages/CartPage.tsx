@@ -24,11 +24,11 @@ function CartLineItem({ item, onQuantityChange, onRemove }: CartLineItemProps) {
   const [quantityFeedback, setQuantityFeedback] = useState("");
   const stockMessage =
     availableStock < 1
-      ? "This variant is unavailable in demo stock. Remove this item from your cart."
+      ? "Out of stock in the demo inventory for this variant. Remove this item from your cart."
       : item.quantity > availableStock
-        ? `Only ${availableStock} are available in demo stock. Reduce the quantity or remove this item.`
+        ? `Insufficient demo stock: only ${availableStock} are available. Reduce the quantity or remove this item.`
         : item.quantity === availableStock
-          ? `Maximum demo stock reached (${availableStock}).`
+          ? `Insufficient demo stock to increase this quantity. Maximum available: ${availableStock}.`
           : "";
   const handleQuantityChange = (quantity: number) => {
     const result = onQuantityChange(item, quantity);
@@ -36,7 +36,7 @@ function CartLineItem({ item, onQuantityChange, onRemove }: CartLineItemProps) {
       setQuantityFeedback("");
     } else if (result.reason === "insufficient-stock") {
       setQuantityFeedback(
-        `Only ${result.availableStock} are available in demo stock; ${result.currentQuantity} are already in your cart.`,
+        `Insufficient demo stock: only ${result.availableStock} are available; ${result.currentQuantity} are already in your cart.`,
       );
     } else if (result.reason === "unavailable-variant") {
       setQuantityFeedback("This variant is unavailable in demo stock.");
