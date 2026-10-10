@@ -265,6 +265,7 @@ function DeliveryDetailsForm() {
 
 export default function CheckoutPage() {
   const { items } = useCart();
+  const [checkoutPath, setCheckoutPath] = useState<"guest" | "sign-in">("guest");
   const subtotal = calculateCartSubtotal(items);
 
   return (
@@ -277,6 +278,58 @@ export default function CheckoutPage() {
             Review the items in your cart. This demo checkout is available without signing in.
           </p>
         </header>
+
+        {items.length > 0 && (
+          <section
+            className="mb-8 border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-5 sm:p-7"
+            aria-labelledby="checkout-path-heading"
+          >
+            <p className="type-label mb-3">HOW WOULD YOU LIKE TO CONTINUE?</p>
+            <h2 id="checkout-path-heading" className="type-section">
+              Choose your checkout path
+            </h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2" role="group" aria-label="Checkout paths">
+              <button
+                className={`flex min-h-20 flex-col items-start justify-center gap-1 rounded-[var(--radius-sm)] border px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] ${
+                  checkoutPath === "guest"
+                    ? "border-[var(--color-accent)] bg-[var(--color-background)]"
+                    : "border-[var(--color-border)] bg-[var(--color-background)]"
+                }`}
+                type="button"
+                aria-pressed={checkoutPath === "guest"}
+                onClick={() => setCheckoutPath("guest")}
+              >
+                <span className="font-medium text-[var(--color-text-primary)]">Continue as Guest</span>
+                <span className="text-sm text-[var(--color-text-secondary)]">No account required</span>
+              </button>
+              <button
+                className={`flex min-h-20 flex-col items-start justify-center gap-1 rounded-[var(--radius-sm)] border px-4 py-3 text-left focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] ${
+                  checkoutPath === "sign-in"
+                    ? "border-[var(--color-accent)] bg-[var(--color-background)]"
+                    : "border-[var(--color-border)] bg-[var(--color-background)]"
+                }`}
+                type="button"
+                aria-pressed={checkoutPath === "sign-in"}
+                onClick={() => setCheckoutPath("sign-in")}
+              >
+                <span className="font-medium text-[var(--color-text-primary)]">
+                  Sign In to Existing Account
+                </span>
+                <span className="text-sm text-[var(--color-text-secondary)]">Not yet connected</span>
+              </button>
+            </div>
+            {checkoutPath === "guest" ? (
+              <p className="mt-4 text-sm text-[var(--color-text-secondary)]" role="status" aria-live="polite">
+                Continue without creating an account. Your cart and delivery details stay available below.
+              </p>
+            ) : (
+              <p className="mt-4 text-sm text-[var(--color-text-secondary)]" role="status" aria-live="polite">
+                Sign-in is not yet connected; no authentication has been attempted. You can continue as a guest
+                without losing your cart or any delivery details entered below.
+              </p>
+            )}
+          </section>
+        )}
 
         {items.length === 0 ? (
           <div className="border border-[var(--color-border-subtle)] bg-[var(--color-surface)] px-6 py-12 text-center sm:px-10 sm:py-16">
