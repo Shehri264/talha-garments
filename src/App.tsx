@@ -7,12 +7,14 @@ import ProductGrid from "./components/ProductGrid";
 import { DEMO_PRODUCTS } from "./data/demoProducts";
 import ShopPage from "./pages/ShopPage";
 import CartPage from "./pages/CartPage";
+import AccountPage from "./pages/AccountPage";
 
 export default function App() {
   const currentPath =
     typeof window === "undefined" ? "/" : window.location.pathname.replace(/\/+$/, "") || "/";
   const isShopPage = currentPath === "/shop";
   const isCartPage = currentPath === "/cart";
+  const isAccountPage = currentPath === "/account";
 
   return (
     <>
@@ -22,6 +24,8 @@ export default function App() {
           <ShopPage />
         ) : isCartPage ? (
           <CartPage />
+        ) : isAccountPage ? (
+          <AccountPage />
         ) : (
           <>
             <Hero />

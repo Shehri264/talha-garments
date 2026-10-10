@@ -74,10 +74,9 @@ export default function Header({ brandName = "Talha Garments" }: HeaderProps) {
               <path d="m15.75 15.75 4.25 4.25" />
             </svg>
           </Button>
-          <Button
-            className="tg-header__account"
-            variant="secondary"
-            type="button"
+          <a
+            className="tg-button tg-button--secondary tg-header__account"
+            href="/account"
             aria-label="Account"
           >
             <svg
@@ -90,7 +89,7 @@ export default function Header({ brandName = "Talha Garments" }: HeaderProps) {
               <circle cx="12" cy="8" r="3.25" />
               <path d="M5.5 20a6.5 6.5 0 0 1 13 0" />
             </svg>
-          </Button>
+          </a>
           <a
             className="tg-button tg-button--secondary tg-header__cart relative"
             href="/cart"
