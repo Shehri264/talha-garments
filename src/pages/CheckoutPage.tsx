@@ -47,6 +47,7 @@ interface DeliveryDetailsErrors {
 function DeliveryDetailsForm() {
   const [errors, setErrors] = useState<DeliveryDetailsErrors>({});
   const [validationMessage, setValidationMessage] = useState("");
+  const [wantsAccountCreation, setWantsAccountCreation] = useState(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -243,6 +244,32 @@ function DeliveryDetailsForm() {
             rows={3}
             autoComplete="off"
           />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="flex cursor-pointer items-start gap-3 text-sm text-[var(--color-text-primary)]">
+            <input
+              className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent)]"
+              type="checkbox"
+              name="wantsAccountCreation"
+              checked={wantsAccountCreation}
+              aria-describedby={wantsAccountCreation ? "account-creation-notice" : undefined}
+              onChange={(event) => setWantsAccountCreation(event.currentTarget.checked)}
+            />
+            <span>
+              Create an account for faster future checkout{" "}
+              <span className="text-[var(--color-text-secondary)]">(Optional)</span>
+            </span>
+          </label>
+          {wantsAccountCreation && (
+            <p
+              id="account-creation-notice"
+              className="mt-3 border-l-2 border-[var(--color-accent)] px-4 py-3 text-sm leading-relaxed text-[var(--color-text-secondary)]"
+              role="status"
+              aria-live="polite"
+            >
+              Account creation is not yet enabled because secure registration is not connected. This choice will not create an account; no password is requested, and you can continue as a guest.
+            </p>
+          )}
         </div>
         <div className="sm:col-span-2">
           <button className="tg-button tg-button--secondary w-full sm:w-auto" type="submit">
