@@ -252,7 +252,10 @@ export default function CartPage() {
                   A cart item is no longer available in the catalogue, so the subtotal cannot be calculated.
                 </p>
               )}
-              <a className="tg-button tg-button--secondary mt-6 w-full" href="/shop">
+              <a className="tg-button tg-button--primary mt-6 w-full" href="/checkout">
+                Continue to Checkout
+              </a>
+              <a className="tg-button tg-button--secondary mt-3 w-full" href="/shop">
                 Continue Shopping
               </a>
             </aside>
