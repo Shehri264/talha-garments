@@ -5,9 +5,15 @@ export interface ProductGridProps {
   products: Product[];
   className?: string;
   layout?: "editorial" | "balanced";
+  onSelectProduct?: (product: Product) => void;
 }
 
-export function ProductGrid({ products, className, layout = "editorial" }: ProductGridProps) {
+export function ProductGrid({
+  products,
+  className,
+  layout = "editorial",
+  onSelectProduct,
+}: ProductGridProps) {
   const isBalanced = layout === "balanced";
   const gridClassName = [
     isBalanced
@@ -31,7 +37,7 @@ export function ProductGrid({ products, className, layout = "editorial" }: Produ
 
         return (
           <li key={product.id} className={`min-w-0 ${cardAlignmentClass} ${desktopSpanClass}`}>
-            <ProductCard product={product} />
+            <ProductCard product={product} onSelectProduct={onSelectProduct} />
           </li>
         );
       })}

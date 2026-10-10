@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import ProductDetail from "../components/ProductDetail";
 import ProductGrid from "../components/ProductGrid";
 import { DEMO_PRODUCTS } from "../data/demoProducts";
 import { PRODUCT_CATEGORIES } from "../data/productCategories";
@@ -33,6 +34,15 @@ export default function ShopPage() {
   const [minimumPriceInput, setMinimumPriceInput] = useState("");
   const [maximumPriceInput, setMaximumPriceInput] = useState("");
   const [sortOption, setSortOption] = useState<ProductSortOption>("featured");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const productOptionsRef = useRef<HTMLElement | null>(null);
+  const productOptionsHeadingRef = useRef<HTMLHeadingElement | null>(null);
+  useEffect(() => {
+    if (selectedProduct) {
+      productOptionsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      productOptionsHeadingRef.current?.focus({ preventScroll: true });
+    }
+  }, [selectedProduct]);
   const hasActiveFilters =
     searchQuery !== "" ||
     selectedCategoryId !== "all" ||
@@ -312,7 +322,11 @@ export default function ShopPage() {
 
         {!priceRangeError &&
           (matchingProducts.length > 0 ? (
-            <ProductGrid products={sortedProducts} layout="balanced" />
+            <ProductGrid
+              products={sortedProducts}
+              layout="balanced"
+              onSelectProduct={setSelectedProduct}
+            />
           ) : (
             <p
               className="border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-5 text-[var(--color-text-secondary)]"
@@ -321,6 +335,37 @@ export default function ShopPage() {
               No products match{normalizedQuery ? ` “${normalizedQuery}”` : ""} with the current filters. Try changing your search or selecting All Categories, All Sizes, and All Colours.
             </p>
           ))}
+
+        {selectedProduct && (
+          <section
+            id="shop-product-options"
+            ref={productOptionsRef}
+            className="mt-10 scroll-mt-8 border border-[var(--color-border-subtle)] bg-[var(--color-surface)] p-4 sm:mt-12 sm:p-6"
+            aria-labelledby="shop-product-options-heading"
+          >
+            <header className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--color-border-subtle)] pb-4">
+              <div>
+                <p className="type-label mb-2">PRODUCT OPTIONS</p>
+                <h2
+                  id="shop-product-options-heading"
+                  ref={productOptionsHeadingRef}
+                  className="type-section"
+                  tabIndex={-1}
+                >
+                  Choose size and colour
+                </h2>
+              </div>
+              <button
+                className="min-h-11 rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-background)] px-4 text-sm text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-[var(--color-accent)]"
+                type="button"
+                onClick={() => setSelectedProduct(null)}
+              >
+                Close options
+              </button>
+            </header>
+            <ProductDetail product={selectedProduct} />
+          </section>
+        )}
       </div>
     </section>
   );

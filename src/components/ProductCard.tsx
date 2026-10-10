@@ -1,10 +1,12 @@
 import { useState } from "react";
+import Button from "./Button";
 import { PRODUCT_CATEGORIES } from "../data/productCategories";
 import type { Product } from "../types/product";
 
 export interface ProductCardProps {
   product: Product;
   className?: string;
+  onSelectProduct?: (product: Product) => void;
 }
 
 const priceFormatter = new Intl.NumberFormat("en-PK", {
@@ -13,7 +15,7 @@ const priceFormatter = new Intl.NumberFormat("en-PK", {
 
 const formatPrice = (price: number): string => `Rs. ${priceFormatter.format(price)}`;
 
-export function ProductCard({ product, className }: ProductCardProps) {
+export function ProductCard({ product, className, onSelectProduct }: ProductCardProps) {
   const primaryImageUrl = product.imageUrls[0];
   const imageKey = `${product.id}:${primaryImageUrl ?? ""}`;
   const [failedImageKey, setFailedImageKey] = useState<string | null>(null);
@@ -79,6 +81,17 @@ export function ProductCard({ product, className }: ProductCardProps) {
             <span className="min-w-0 max-w-full break-words font-semibold">{formatPrice(product.price)}</span>
           )}
         </div>
+        {onSelectProduct && (
+          <Button
+            className="mt-4 w-full"
+            variant="secondary"
+            type="button"
+            aria-label={`Choose size and colour for ${product.name}`}
+            onClick={() => onSelectProduct(product)}
+          >
+            Choose size &amp; colour
+          </Button>
+        )}
       </div>
     </article>
   );
